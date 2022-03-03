@@ -44,29 +44,7 @@
                 </div>
             </div>
             <div class="col">
-                <form>
-                    <label class="form-label" for="name">Character Name</label><input class="form-control" id="name"
-                        name="name"></input>
-                    <label class="form-label" for="class">Character Class</label><input class="form-control" id="class"
-                        name="class"></input>
-                    <label class="form-label" for="agility">Character Agility</label><input class="form-control"
-                        id="agility" name="agility"></input>
-                    <label class="form-label" for="intelligence">Character intelligence</label><input
-                        class="form-control" id="intelligence" name="intelligence"></input>
-                    <label class="form-label" for="charisma">Character charisma</label><input class="form-control"
-                        id="charisma" name="charisma"></input>
-
-                    <label class="form-label" for="constitution">Character constitution</label><input
-                        class="form-control" id="constitution" name="constitution"></input>
-                    <label class="form-label" for="wisdom">Character wisdom</label><input class="form-control"
-                        id="wisdom" name="wisdom"></input>
-                    <label class="form-label" for="strength">Character strength</label><input class="form-control"
-                        id="strength" name="strength"></input>
-
-                    <label class="form-label" for="maxhp">Character Max HP</label><input class="form-control" id="maxhp"
-                        name="maxhp"></input>
-                    <label class="form-label" for="hp">Character HP</label><input class="form-control" id="hp"
-                        name="hp"></input>
+                <form id="charactersheet">
                     <button id="add_character">Add Character</button>
                 </form>
             </div>
@@ -79,15 +57,18 @@
     window.addEventListener("DOMContentLoaded", (event) => {
         document.getElementById("add_character").addEventListener("click",
             (button, event) => {
-                d3.select("#d3svg").selectAll("circle").style("fill", "red");
                 var newCharacter = {};
-                for (let attr of ["name", "class", "agility", "intelligence", "charisma", "constitution", "wisdom", "strength", "maxhp", "hp"]) {
+                for (let attr of attrs) {
                     newCharacter[attr] = document.getElementById(attr).value;
                 }
                 var cs = vega.changeset().insert([newCharacter]);
                 embedded.then(res => res.view.change('characters', cs).run());
 
             });
+        var attrs = ["name", "class", "agility", "intelligence", "charisma", "constitution", "wisdom", "strength", "maxhp", "hp"];
+        var attrDivs = d3.select("#charactersheet").selectAll("div").data(attrs).enter().append("div");
+        attrDivs.append("label").attr("class", "form-label").attr("for", d => d).text(d => `Character ${d}`);
+        attrDivs.append("input").attr("class", "form-control").attr("name", d => d).attr("id", d => d);
         d3.select("#d3svg").append("circle").attr("cx", 200).attr("cy", 200).attr("r", 20).style("fill", "black");
     });
 </script>
