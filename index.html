@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <title>Our Example RPG Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@6"></script>
+</head>
+
+<body>
+    <h1>Hello!</h1>
+    <p>This is my HTML page.</p>
+    <p>It will contain many things.</p>
+    <div id="viz"></div>
+    <ul>
+        <li><label for="name">Character Name</label><input id="name" name="name"></input></li>
+        <li><label for="class">Character Class</label><input id="class" name="class"></input></li>
+        <li><label for="agility">Character Agility</label><input id="agility" name="agility"></input></li>
+        <li><label for="intelligence">Character intelligence</label><input id="intelligence"
+                name="intelligence"></input></li>
+        <li><label for="charisma">Character charisma</label><input id="charisma" name="charisma"></input></li>
+        <li><label for="constitution">Character constitution</label><input id="constitution"
+                name="constitution"></input></li>
+        <li><label for="wisdom">Character wisdom</label><input id="wisdom" name="wisdom"></input></li>
+        <li><label for="strength">Character strength</label><input id="strength" name="strength"></input></li>
+        <li><label for="maxhp">Character Max HP</label><input id="maxhp" name="maxhp"></input></li>
+        <li><label for="hp">Character HP</label><input id="hp" name="hp"></input></li>
+        <li><button id="add_character">Add Character</button></li>
+    </ul>
+</body>
+
+<script>
+    var embedded = vegaEmbed("#viz", "combined_rpg.json");
+    document.getElementById("add_character").addEventListener("click",
+        (button, event) => {
+            var newCharacter = {};
+            for (let attr of ["name", "class", "agility", "intelligence", "charisma", "constitution", "wisdom", "strength", "maxhp", "hp"]) {
+                newCharacter[attr] = document.getElementById(attr).value;
+            }
+            var cs = vega.changeset().insert([newCharacter]);
+            embedded.then(res => res.view.change('characters', cs).run());
+
+        })
+</script>
+
+</html>
